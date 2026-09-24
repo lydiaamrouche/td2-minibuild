@@ -1,21 +1,21 @@
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GavTest {
 
-    @Test
-    void parseExtraitLeGroupe() {
-        Gav gav = Gav.parse("org.acme:lib-a:1.0.0");
+    @ParameterizedTest
+    @CsvSource({
+            "org.acme:lib-a:1.0.0, org.acme, lib-a, 1.0.0",
+            "org.other:lib-c:3.0.0, org.other, lib-c, 3.0.0"
+    })
+    void parseExtraitLesTroisParties(
+            String coordonnee, String groupe, String artefact, String version) {
+        Gav gav = Gav.parse(coordonnee);
 
-        assertEquals("org.acme", gav.group());
-    }
-    @Test
-    void parseExtraitGroupeArtefactEtVersion() {
-        Gav gav = Gav.parse("org.other:lib-c:3.0.0");
-
-        assertEquals("org.other", gav.group());
-        assertEquals("lib-c", gav.artifact());
-        assertEquals("3.0.0", gav.version());
+        assertEquals(groupe, gav.group());
+        assertEquals(artefact, gav.artifact());
+        assertEquals(version, gav.version());
     }
 }
